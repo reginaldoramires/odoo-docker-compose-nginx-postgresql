@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Tree View -->
+        <record id="view_chatwoot_account_tree" model="ir.ui.view">
+            <field name="name">chatwoot.account.tree</field>
+            <field name="model">chatwoot.account</field>
+            <field name="arch" type="xml">
+                <tree string="Chatwoot Accounts">
+                    <field name="name"/>
+                    <field name="account_id"/>
+                    <field name="base_url"/>
+                    <field name="active"/>
+                    <field name="inbox_count"/>
+                    <field name="agent_count"/>
+                    <field name="conversation_count"/>
+                    <field name="last_sync_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form View -->
+        <record id="view_chatwoot_account_form" model="ir.ui.view">
+            <field name="name">chatwoot.account.form</field>
+            <field name="model">chatwoot.account</field>
+            <field name="arch" type="xml">
+                <form string="Chatwoot Account">
+                    <header>
+                        <button name="action_test_connection" string="Test Connection" type="object" class="oe_highlight"/>
+                        <button name="action_sync_all" string="Sync All" type="object" class="oe_highlight"/>
+                        <field name="active" widget="boolean_toggle"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="%(action_chatwoot_inbox)d" type="action" class="oe_stat_button" icon="fa-inbox">
+                                <field name="inbox_count" widget="statinfo" string="Inboxes"/>
+                            </button>
+                            <button name="%(action_chatwoot_agent)d" type="action" class="oe_stat_button" icon="fa-users">
+                                <field name="agent_count" widget="statinfo" string="Agents"/>
+                            </button>
+                            <button name="%(action_chatwoot_conversation)d" type="action" class="oe_stat_button" icon="fa-comments">
+                                <field name="conversation_count" widget="statinfo" string="Conversations"/>
+                            </button>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="account_id"/>
+                                <field name="base_url"/>
+                                <field name="api_access_token" password="True"/>
+                            </group>
+                            <group>
+                                <field name="auto_sync"/>
+                                <field name="sync_interval" attrs="{'invisible': [('auto_sync', '=', False)]}"/>
+                                <field name="last_sync_date"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Integration Settings">
+                                <group>
+                                    <group string="Webhook">
+                                        <field name="webhook_enabled"/>
+                                        <field name="webhook_url" widget="url"/>
+                                        <field name="webhook_secret" password="True"/>
+                                    </group>
+                                    <group string="Auto Actions">
+                                        <field name="auto_create_partner"/>
+                                        <field name="auto_create_lead"/>
+                                        <field name="auto_assign_agent"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Advanced">
+                                <group>
+                                    <field name="enable_csat"/>
+                                    <field name="enable_continuity"/>
+                                    <field name="domain"/>
+                                    <field name="locale"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_chatwoot_account" model="ir.actions.act_window">
+            <field name="name">Chatwoot Accounts</field>
+            <field name="res_model">chatwoot.account</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </data>
+</odoo>

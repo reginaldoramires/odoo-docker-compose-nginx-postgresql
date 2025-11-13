@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Tree View -->
+        <record id="view_chatwoot_conversation_tree" model="ir.ui.view">
+            <field name="name">chatwoot.conversation.tree</field>
+            <field name="model">chatwoot.conversation</field>
+            <field name="arch" type="xml">
+                <tree string="Conversations" decoration-success="status == 'resolved'" decoration-warning="status == 'pending'" decoration-danger="status == 'open' and unread_count > 0">
+                    <field name="conversation_id"/>
+                    <field name="contact_id"/>
+                    <field name="inbox_id"/>
+                    <field name="status"/>
+                    <field name="priority"/>
+                    <field name="assignee_id"/>
+                    <field name="team_id"/>
+                    <field name="unread_count"/>
+                    <field name="last_activity_at"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form View -->
+        <record id="view_chatwoot_conversation_form" model="ir.ui.view">
+            <field name="name">chatwoot.conversation.form</field>
+            <field name="model">chatwoot.conversation</field>
+            <field name="arch" type="xml">
+                <form string="Conversation">
+                    <header>
+                        <button name="action_resolve" string="Resolve" type="object" class="oe_highlight" attrs="{'invisible': [('status', '=', 'resolved')]}"/>
+                        <button name="action_reopen" string="Reopen" type="object" attrs="{'invisible': [('status', '!=', 'resolved')]}"/>
+                        <button name="action_pending" string="Mark Pending" type="object"/>
+                        <button name="action_sync_messages" string="Sync Messages" type="object"/>
+                        <field name="status" widget="statusbar" statusbar_visible="open,pending,resolved"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_create_lead" string="Create Opportunity" type="object" class="oe_stat_button" icon="fa-briefcase" attrs="{'invisible': [('lead_id', '!=', False)]}"/>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="conversation_id"/>
+                                <field name="contact_id"/>
+                                <field name="partner_id"/>
+                                <field name="inbox_id"/>
+                                <field name="channel"/>
+                            </group>
+                            <group>
+                                <field name="assignee_id"/>
+                                <field name="team_id"/>
+                                <field name="priority" widget="priority"/>
+                                <field name="lead_id" attrs="{'invisible': [('lead_id', '=', False)]}"/>
+                                <field name="account_id" invisible="1"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="label_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                        </group>
+                        <notebook>
+                            <page string="Messages">
+                                <field name="message_ids" mode="tree">
+                                    <tree string="Messages" decoration-info="message_type == 'incoming'" decoration-muted="private == True">
+                                        <field name="created_at"/>
+                                        <field name="sender_name"/>
+                                        <field name="message_type"/>
+                                        <field name="content"/>
+                                        <field name="private"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Details">
+                                <group>
+                                    <group>
+                                        <field name="timestamp"/>
+                                        <field name="last_activity_at"/>
+                                        <field name="first_reply_created_at"/>
+                                    </group>
+                                    <group>
+                                        <field name="unread_count"/>
+                                        <field name="message_count"/>
+                                        <field name="can_reply"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Search View -->
+        <record id="view_chatwoot_conversation_search" model="ir.ui.view">
+            <field name="name">chatwoot.conversation.search</field>
+            <field name="model">chatwoot.conversation</field>
+            <field name="arch" type="xml">
+                <search string="Search Conversations">
+                    <field name="conversation_id"/>
+                    <field name="contact_id"/>
+                    <field name="assignee_id"/>
+                    <field name="inbox_id"/>
+                    <filter string="Open" name="open" domain="[('status', '=', 'open')]"/>
+                    <filter string="Pending" name="pending" domain="[('status', '=', 'pending')]"/>
+                    <filter string="Resolved" name="resolved" domain="[('status', '=', 'resolved')]"/>
+                    <separator/>
+                    <filter string="Assigned to Me" name="my_conversations" domain="[('assignee_id.user_id', '=', uid)]"/>
+                    <filter string="Unassigned" name="unassigned" domain="[('assignee_id', '=', False)]"/>
+                    <separator/>
+                    <filter string="With Unread" name="unread" domain="[('unread_count', '>', 0)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Status" name="group_status" context="{'group_by': 'status'}"/>
+                        <filter string="Inbox" name="group_inbox" context="{'group_by': 'inbox_id'}"/>
+                        <filter string="Agent" name="group_agent" context="{'group_by': 'assignee_id'}"/>
+                        <filter string="Team" name="group_team" context="{'group_by': 'team_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Actions -->
+        <record id="action_chatwoot_conversation" model="ir.actions.act_window">
+            <field name="name">All Conversations</field>
+            <field name="res_model">chatwoot.conversation</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="action_chatwoot_conversation_open" model="ir.actions.act_window">
+            <field name="name">Open Conversations</field>
+            <field name="res_model">chatwoot.conversation</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('status', '=', 'open')]</field>
+            <field name="context">{'search_default_open': 1}</field>
+        </record>
+
+        <record id="action_chatwoot_conversation_pending" model="ir.actions.act_window">
+            <field name="name">Pending Conversations</field>
+            <field name="res_model">chatwoot.conversation</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('status', '=', 'pending')]</field>
+            <field name="context">{'search_default_pending': 1}</field>
+        </record>
+
+        <record id="action_chatwoot_conversation_resolved" model="ir.actions.act_window">
+            <field name="name">Resolved Conversations</field>
+            <field name="res_model">chatwoot.conversation</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('status', '=', 'resolved')]</field>
+            <field name="context">{'search_default_resolved': 1}</field>
+        </record>
+
+    </data>
+</odoo>

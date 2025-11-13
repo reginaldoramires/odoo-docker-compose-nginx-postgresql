@@ -1,0 +1,128 @@
+version: '3'
+
+services:
+  # PostgreSQL para Chatwoot (separado do Odoo)
+  chatwoot_postgres:
+    image: postgres:13
+    restart: always
+    container_name: chatwoot_postgres
+    environment:
+      - POSTGRES_PASSWORD=chatwoot
+      - POSTGRES_USER=chatwoot
+      - POSTGRES_DB=chatwoot_production
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - ./chatwoot-db-data:/var/lib/postgresql/data/pgdata
+    networks:
+      - odoo_network
+    logging:
+      driver: json-file
+      options:
+        max-size: "30m"
+        max-file: "10"
+
+  # Redis para Chatwoot
+  chatwoot_redis:
+    image: redis:7-alpine
+    restart: always
+    container_name: chatwoot_redis
+    command: redis-server --appendonly yes
+    volumes:
+      - ./chatwoot-redis-data:/data
+    networks:
+      - odoo_network
+
+  # Chatwoot Web
+  chatwoot:
+    image: chatwoot/chatwoot:latest
+    restart: always
+    container_name: chatwoot
+    environment:
+      # Database
+      - POSTGRES_HOST=chatwoot_postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DATABASE=chatwoot_production
+      - POSTGRES_USERNAME=chatwoot
+      - POSTGRES_PASSWORD=chatwoot
+
+      # Redis
+      - REDIS_URL=redis://chatwoot_redis:6379
+
+      # Application
+      - RAILS_ENV=production
+      - NODE_ENV=production
+      - RAILS_LOG_TO_STDOUT=true
+      - SECRET_KEY_BASE=replace_with_your_secret_key_base
+      - FRONTEND_URL=http://localhost:3000
+
+      # Mailer (configure with your SMTP)
+      - MAILER_SENDER_EMAIL=chatwoot@yourdomain.com
+      - SMTP_ADDRESS=smtp.gmail.com
+      - SMTP_PORT=587
+      - SMTP_USERNAME=your-email@gmail.com
+      - SMTP_PASSWORD=your-password
+      - SMTP_AUTHENTICATION=plain
+      - SMTP_ENABLE_STARTTLS_AUTO=true
+
+      # Storage (Local by default, can configure S3)
+      - ACTIVE_STORAGE_SERVICE=local
+
+      # Chatwoot Settings
+      - INSTALLATION_NAME=Chatwoot Odoo Integration
+      - FORCE_SSL=false
+      - ENABLE_ACCOUNT_SIGNUP=true
+
+      # Integration with Odoo
+      - ODOO_URL=http://odoo:8069
+      - WEBHOOK_ENABLED=true
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./chatwoot-storage:/app/storage
+      - ./chatwoot-public:/app/public
+    depends_on:
+      - chatwoot_postgres
+      - chatwoot_redis
+    networks:
+      - odoo_network
+    command: bundle exec rails s -p 3000 -b 0.0.0.0
+
+  # Chatwoot Sidekiq (Background Jobs)
+  chatwoot_sidekiq:
+    image: chatwoot/chatwoot:latest
+    restart: always
+    container_name: chatwoot_sidekiq
+    environment:
+      # Same environment as chatwoot web
+      - POSTGRES_HOST=chatwoot_postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DATABASE=chatwoot_production
+      - POSTGRES_USERNAME=chatwoot
+      - POSTGRES_PASSWORD=chatwoot
+      - REDIS_URL=redis://chatwoot_redis:6379
+      - RAILS_ENV=production
+      - NODE_ENV=production
+      - RAILS_LOG_TO_STDOUT=true
+      - SECRET_KEY_BASE=replace_with_your_secret_key_base
+      - FRONTEND_URL=http://localhost:3000
+      - ODOO_URL=http://odoo:8069
+    volumes:
+      - ./chatwoot-storage:/app/storage
+      - ./chatwoot-public:/app/public
+    depends_on:
+      - chatwoot_postgres
+      - chatwoot_redis
+      - chatwoot
+    networks:
+      - odoo_network
+    command: bundle exec sidekiq -C config/sidekiq.yml
+
+networks:
+  odoo_network:
+    external: true
+
+volumes:
+  chatwoot-db-data:
+  chatwoot-redis-data:
+  chatwoot-storage:
+  chatwoot-public:

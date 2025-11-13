@@ -1,13 +1,50 @@
-# Odoo ERP, PostgreSQL and Nginx Compose 🔥 🇧🇷
+# Odoo ERP with Chatwoot Omnichannel Integration 🚀 🇧🇷
 
-  + Odoo
+  + Odoo ERP
+  + Chatwoot Omnichannel Platform (NEW!)
   + PostgreSQL
-  + Nginx 
+  + Redis
+  + Nginx
   + Certbot Letsencrypt SSL
+  + Complete API Integration
+  + Multi-channel Support (WhatsApp, Facebook, Email, etc.)
   + Installations and use simplified ❤
 
-## Odoo ERP 🖥️
+## Odoo ERP + Chatwoot Omnichannel 🖥️ 💬
 ![project-image](https://user-images.githubusercontent.com/59855397/216739166-c91ef374-50d4-4b9e-bfb4-987954f5f0f2.png)
+
+## 🎯 NEW: Complete Omnichannel Solution!
+
+This project now includes a **complete integration** between Odoo and Chatwoot, providing:
+
+✅ **Unified Multi-channel Communication** - WhatsApp, Facebook, Email, Twitter, Telegram, Website Chat
+✅ **Real-time Synchronization** - Webhooks + REST API
+✅ **Automatic CRM Integration** - Auto-create leads and partners
+✅ **Agent Dashboard** - Complete conversation management
+✅ **Team Management** - Automatic assignment and distribution
+✅ **Full Docker Stack** - Ready for production
+
+### 📚 Complete Documentation
+
+**For detailed Chatwoot integration guide, see: [CHATWOOT_INTEGRATION.md](CHATWOOT_INTEGRATION.md)**
+
+### 🚀 Quick Start with Chatwoot
+
+```bash
+# Clone the repository
+git clone <repository-url>
+cd odoo-docker-compose-nginx-postgresql
+
+# Run automated setup
+chmod +x setup-chatwoot.sh
+./setup-chatwoot.sh
+
+# Access:
+# Odoo: http://localhost:8069
+# Chatwoot: http://localhost:3000
+```
+
+For manual installation and detailed configuration, check [CHATWOOT_INTEGRATION.md](CHATWOOT_INTEGRATION.md).
 
 
 ### Clone this repository

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_chatwoot_contact_tree" model="ir.ui.view">
+            <field name="name">chatwoot.contact.tree</field>
+            <field name="model">chatwoot.contact</field>
+            <field name="arch" type="xml">
+                <tree string="Contacts">
+                    <field name="name"/>
+                    <field name="email"/>
+                    <field name="phone_number"/>
+                    <field name="partner_id"/>
+                    <field name="conversation_count"/>
+                    <field name="last_activity_at"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_chatwoot_contact_form" model="ir.ui.view">
+            <field name="name">chatwoot.contact.form</field>
+            <field name="model">chatwoot.contact</field>
+            <field name="arch" type="xml">
+                <form string="Contact">
+                    <sheet>
+                        <field name="avatar_url" widget="image" class="oe_avatar"/>
+                        <group>
+                            <field name="name"/>
+                            <field name="email"/>
+                            <field name="phone_number"/>
+                            <field name="partner_id"/>
+                            <field name="account_id"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="action_chatwoot_contact" model="ir.actions.act_window">
+            <field name="name">Contacts</field>
+            <field name="res_model">chatwoot.contact</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Cron Job para sincronização automática -->
+        <record id="ir_cron_chatwoot_sync" model="ir.cron">
+            <field name="name">Chatwoot: Sync All Accounts</field>
+            <field name="model_id" ref="model_chatwoot_account"/>
+            <field name="state">code</field>
+            <field name="code">model.cron_sync_all_accounts()</field>
+            <field name="interval_number">5</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="active">True</field>
+            <field name="doall">False</field>
+        </record>
+
+    </data>
+</odoo>

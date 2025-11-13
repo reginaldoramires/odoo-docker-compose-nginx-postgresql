@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Main Menu -->
+        <menuitem id="menu_chatwoot_root"
+                  name="Chatwoot"
+                  sequence="10"
+                  web_icon="odoo_chatwoot_omnichannel,static/description/icon.png"
+                  groups="group_chatwoot_user"/>
+
+        <!-- Dashboard -->
+        <menuitem id="menu_chatwoot_dashboard"
+                  name="Dashboard"
+                  parent="menu_chatwoot_root"
+                  sequence="1"
+                  action="action_chatwoot_dashboard"/>
+
+        <!-- Conversations -->
+        <menuitem id="menu_chatwoot_conversations"
+                  name="Conversations"
+                  parent="menu_chatwoot_root"
+                  sequence="10"/>
+
+        <menuitem id="menu_chatwoot_conversation_all"
+                  name="All Conversations"
+                  parent="menu_chatwoot_conversations"
+                  sequence="1"
+                  action="action_chatwoot_conversation"/>
+
+        <menuitem id="menu_chatwoot_conversation_open"
+                  name="Open"
+                  parent="menu_chatwoot_conversations"
+                  sequence="2"
+                  action="action_chatwoot_conversation_open"/>
+
+        <menuitem id="menu_chatwoot_conversation_pending"
+                  name="Pending"
+                  parent="menu_chatwoot_conversations"
+                  sequence="3"
+                  action="action_chatwoot_conversation_pending"/>
+
+        <menuitem id="menu_chatwoot_conversation_resolved"
+                  name="Resolved"
+                  parent="menu_chatwoot_conversations"
+                  sequence="4"
+                  action="action_chatwoot_conversation_resolved"/>
+
+        <!-- Contacts -->
+        <menuitem id="menu_chatwoot_contacts"
+                  name="Contacts"
+                  parent="menu_chatwoot_root"
+                  sequence="20"
+                  action="action_chatwoot_contact"/>
+
+        <!-- Configuration -->
+        <menuitem id="menu_chatwoot_config"
+                  name="Configuration"
+                  parent="menu_chatwoot_root"
+                  sequence="90"
+                  groups="group_chatwoot_manager"/>
+
+        <menuitem id="menu_chatwoot_account"
+                  name="Accounts"
+                  parent="menu_chatwoot_config"
+                  sequence="1"
+                  action="action_chatwoot_account"/>
+
+        <menuitem id="menu_chatwoot_inbox"
+                  name="Inboxes"
+                  parent="menu_chatwoot_config"
+                  sequence="2"
+                  action="action_chatwoot_inbox"/>
+
+        <menuitem id="menu_chatwoot_agent"
+                  name="Agents"
+                  parent="menu_chatwoot_config"
+                  sequence="3"
+                  action="action_chatwoot_agent"/>
+
+        <menuitem id="menu_chatwoot_team"
+                  name="Teams"
+                  parent="menu_chatwoot_config"
+                  sequence="4"
+                  action="action_chatwoot_team"/>
+
+        <menuitem id="menu_chatwoot_label"
+                  name="Labels"
+                  parent="menu_chatwoot_config"
+                  sequence="5"
+                  action="action_chatwoot_label"/>
+
+        <menuitem id="menu_chatwoot_webhook"
+                  name="Webhook Logs"
+                  parent="menu_chatwoot_config"
+                  sequence="6"
+                  action="action_chatwoot_webhook"
+                  groups="group_chatwoot_admin"/>
+
+    </data>
+</odoo>

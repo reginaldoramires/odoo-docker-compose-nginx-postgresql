@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Exemplo de configuração de canal (comentado, usuário deve configurar) -->
+        <!--
+        <record id="chatwoot_account_default" model="chatwoot.account">
+            <field name="name">My Chatwoot Account</field>
+            <field name="account_id">1</field>
+            <field name="base_url">http://chatwoot:3000</field>
+            <field name="api_access_token">your_api_token_here</field>
+            <field name="active">True</field>
+            <field name="auto_sync">True</field>
+            <field name="sync_interval">5</field>
+            <field name="webhook_enabled">True</field>
+            <field name="auto_create_partner">True</field>
+            <field name="auto_create_lead">True</field>
+            <field name="auto_assign_agent">True</field>
+        </record>
+        -->
+
+    </data>
+</odoo>
